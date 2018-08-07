@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 属性配置 -->
+	<properties resource="jdbc.properties">
+		<property name="password" value="root"/>
+		<!-- 开启指定默认值功能 -->
+		<property name="org.apache.ibatis.parsing.PropertyParser.enable-default-value" value="true"/>
+		<!-- 指定默认值的分隔符（默认是:） -->
+		<property name="org.apache.ibatis.parsing.PropertyParser.default-value-separator" value="?:"/>
+	</properties>
+	
+	<!-- 行为设置 -->
+	<settings>
+		<!-- <setting name="cacheEnabled" value="false" /> -->
+		<!-- 开启驼峰匹配 -->
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+	
+	<!-- 类别名 -->
+	<!-- <typeAliases>
+		<typeAlias type="com.mybatis.pojo.User" alias="User"/>
+		<package name="com.mybatis"/>
+	</typeAliases> -->
+	
+	<!-- 环境配置 -->
+	<environments default="development">
+		<environment id="development">
+			<!-- 配置事务管理器 + 数据源 -->
+			<!-- <transactionManager type="org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory"/> -->
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}" />
+				<property name="url" value="${url}" />
+				<property name="username" value="${username?:root}" />
+				<property name="password" value="${password}" />
+			</dataSource>
+			<!-- <dataSource type="com.mybatis.datasource.MyHikariDataSourceFactory">
+				<property name="driverClassName" value="${driver}" />
+				<property name="jdbcUrl" value="${url}" />
+				<property name="username" value="${username?:root}" />
+				<property name="password" value="${password}" />
+			</dataSource> -->
+		</environment>
+		<!-- <environment id="test">
+			<transactionManager type="MANAGED"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}" />
+				<property name="url" value="${url}" />
+				<property name="username" value="${username?:root}" />
+				<property name="password" value="${password}" />
+			</dataSource>
+		</environment> -->
+	</environments>
+	
+	<!-- 引入映射文件 -->
+	<mappers>
+		<mapper resource="UserMapper.xml" />
+		<!-- <mapper url="file:///home/yuzhou/personalDevForEclip/workspace/study_mybatis01/src/main/resources/UserMapper.xml"/> -->
+		<!-- <mapper class="com.mybatis.dao.UserMapper"/> -->
+		<!-- <mapper resource="sqlSegment.xml"/> -->
+		<!-- <package name="com.mybatis.dao"/> -->
+	</mappers>
+</configuration>
