@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baicai.mybatis.dao.UserDao">
 
-    <select id="queryUserById" resultType="com.baicai.mybatis.pojo.User">
+    <select id="queryUserById" resultType="User">
         select * from tb_user where id = #{id}
     </select>
     

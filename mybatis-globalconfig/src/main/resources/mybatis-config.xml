@@ -20,10 +20,10 @@
 	</settings>
 	
 	<!-- 类别名 -->
-	<!-- <typeAliases>
-		<typeAlias type="com.mybatis.pojo.User" alias="User"/>
-		<package name="com.mybatis"/>
-	</typeAliases> -->
+	<typeAliases>
+		<!-- <typeAlias type="com.mybatis.pojo.User" alias="User"/> -->
+		<package name="com.baicai.mybatis.pojo"/>
+	</typeAliases>
 	
 	<!-- 环境配置 -->
 	<environments default="development">
@@ -31,21 +31,23 @@
 			<!-- 配置事务管理器 + 数据源 -->
 			<!-- <transactionManager type="org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory"/> -->
 			<transactionManager type="JDBC" />
-			<dataSource type="POOLED">
+			<!-- <dataSource type="POOLED">
 				<property name="driver" value="${driver}" />
 				<property name="url" value="${url}" />
 				<property name="username" value="${username?:root}" />
 				<property name="password" value="${password}" />
-			</dataSource>
-			<!-- <dataSource type="com.mybatis.datasource.MyHikariDataSourceFactory">
+			</dataSource> -->
+			<dataSource type="com.baicai.mybatis.datasource.MyHikariDataSourceFactory">
 				<property name="driverClassName" value="${driver}" />
 				<property name="jdbcUrl" value="${url}" />
 				<property name="username" value="${username?:root}" />
 				<property name="password" value="${password}" />
-			</dataSource> -->
+			</dataSource>
 		</environment>
 		<!-- <environment id="test">
-			<transactionManager type="MANAGED"/>
+			<transactionManager type="MANAGED">
+				<property name="closeConnection" value="false"/>
+			</transactionManager>
 			<dataSource type="POOLED">
 				<property name="driver" value="${driver}" />
 				<property name="url" value="${url}" />
@@ -57,10 +59,9 @@
 	
 	<!-- 引入映射文件 -->
 	<mappers>
-		<mapper resource="UserMapper.xml" />
-		<!-- <mapper url="file:///home/yuzhou/personalDevForEclip/workspace/study_mybatis01/src/main/resources/UserMapper.xml"/> -->
-		<!-- <mapper class="com.mybatis.dao.UserMapper"/> -->
-		<!-- <mapper resource="sqlSegment.xml"/> -->
-		<!-- <package name="com.mybatis.dao"/> -->
+		<!-- <mapper resource="UserMapper.xml" /> -->
+		<!-- <mapper url="file:///home/yuzhou/personalDev/workspace/study-mybatis/mybatis-globalconfig/src/main/resources/UserMapper.xml"/> -->
+		<!-- <mapper class="com.baicai.mybatis.dao.UserDao"/> -->
+		<package name="com.baicai.mybatis.dao"/>
 	</mappers>
 </configuration>

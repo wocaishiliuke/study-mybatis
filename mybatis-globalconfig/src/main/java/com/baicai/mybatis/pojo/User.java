@@ -2,6 +2,7 @@ package com.baicai.mybatis.pojo;
 
 import java.util.Date;
 
+//@Alias("haha")
 public class User {
     private Long id;
     // 用户名
