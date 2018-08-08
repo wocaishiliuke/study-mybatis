@@ -9,5 +9,6 @@
   	<module>mybatis-helloworld</module>
   	<module>mybatis-dynamicproxy</module>
   	<module>mybatis-globalconfig</module>
+  	<module>mybatis-mapperxml</module>
   </modules>
 </project>
