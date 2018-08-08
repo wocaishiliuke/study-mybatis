@@ -72,5 +72,17 @@ public class UserDaoTest {
 		//对于MANAGED的就没有设置自动提交事务的方法，而MySQL又默认自动提交，所以不需要手动提交
 		this.sqlSession.commit();//这里的sqlSession要求是同一个会话
 	}
-
+	
+	@Test
+	public void testQueryUserByUsername() {
+		System.out.println(this.userDao.queryUserByUsername("zhangsan"));
+	}
+	
+	@Test
+	public void testQueryUserLikeUsername() {
+		List<User> list = this.userDao.queryUserLikeUsername("li");
+		for (User user : list) {
+			System.out.println(user);
+		}
+	}
 }

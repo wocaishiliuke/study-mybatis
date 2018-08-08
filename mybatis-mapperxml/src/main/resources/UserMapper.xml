@@ -23,4 +23,23 @@
 	<delete id="deleteById" parameterType="long">
 		DELETE FROM tb_user WHERE id = #{id}
 	</delete>
+	
+	<select id="queryUserByUsername" resultType="User">
+		<!-- ${username}会取到连接池的username=root哦，#{}预编译占位，不会 -->
+	  	<!-- SELECT * FROM tb_user WHERE user_name = '${username}' -->
+	  	SELECT * FROM tb_user WHERE user_name = '${param1}'
+	  	<!-- SELECT * FROM tb_user WHERE user_name = #{username} -->
+	  	<!-- SELECT * FROM tb_user WHERE user_name = #{param1} -->
+	</select>
+	
+	<select id="queryUserLikeUsername" resultType="User">
+	 	<!-- ${}单引号双引号都可以；${username}会取到连接池的username=root哦 -->
+	  	<!-- SELECT * FROM tb_user WHERE user_name LIKE '%${param1}%' -->
+	  	<!-- SELECT * FROM tb_user WHERE user_name LIKE "%${param1}%" -->
+	  	<!-- SELECT * FROM tb_user WHERE user_name LIKE "%${username}%" -->
+	  	<!-- #{}只能用双引号 -->
+	  	<!-- SELECT * FROM tb_user WHERE user_name LIKE "%"#{param1}"%" -->
+	  	<!-- SELECT * FROM tb_user WHERE user_name LIKE CONCAT("%",#{username},"%") -->
+	  SELECT * FROM tb_user WHERE user_name LIKE "%"#{username}"%"
+	</select>
 </mapper>
