@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baicai.mybatis.dao.UserDaoForTestParam">
+
+	<!-- 1.单个非表字段参数 -->
+	<select id="queryAllByTableName" resultType="User">
+		<!-- SELECT * FROM ${_parameter} -->
+		SELECT * FROM ${value}
+	</select>
+	<select id="queryAllByTableNameWithAnno" resultType="User">
+		<!-- SELECT * FROM ${param1} -->
+		SELECT * FROM ${tableName}
+	</select>
+	
+	<!-- 2.单个表字段参数 -->
+	<select id="queryUserById" resultType="User">
+		<!-- 不推荐${}拼接 -->
+		<!-- SELECT * FROM tb_user WHERE id = ${_parameter} -->
+		<!-- SELECT * FROM tb_user WHERE id = ${value} -->
+		SELECT * FROM tb_user WHERE id = #{haha}
+	</select>
+	<select id="queryUserByIdWithAnno" resultType="User">
+		<!-- 不推荐${}拼接 -->
+		<!-- SELECT * FROM tb_user WHERE id = ${id} -->
+		<!-- SELECT * FROM tb_user WHERE id = ${param1} -->
+		<!-- SELECT * FROM tb_user WHERE id = #{param1} -->
+		SELECT * FROM tb_user WHERE id = #{id}
+	</select>
+	
+	<!-- 3.多个非表字段和表字段参数混合 -->
+	<select id="queryAllByTableNamesAndIdName" resultType="User">
+		<!-- 表字段不推荐用${}拼接,还要手动判断参数类型,arg和param可以混用,因为都在_parameter的Map中 -->
+		<!-- SELECT * FROM ${arg0} A INNER JOIN ${arg1} B ON A.id = B.id WHERE A.id = ${param3} AND A.name = '${arg3}' -->
+		<!-- SELECT * FROM ${arg0} A INNER JOIN ${arg1} B ON A.id = B.id WHERE A.id = #{arg2} AND A.name = #{arg3} -->
+		SELECT * FROM ${param1} A INNER JOIN ${param2} B ON A.id = B.id WHERE A.id = #{param3} AND A.name = #{param4}
+	</select>
+	<select id="queryAllByTableNamesAndIdNameWithAnno" resultType="User">
+		<!-- 表字段不推荐用${}拼接,还要手动判断参数类型,arg和param可以混用,因为都在_parameter的Map中 -->
+		<!-- SELECT * FROM ${table1} A INNER JOIN ${param2} B ON A.id = B.id WHERE A.id = ${id} AND A.name = '${param4}' -->
+		<!-- SELECT * FROM ${param1} A INNER JOIN ${param2} B ON A.id = B.id WHERE A.id = #{param3} AND A.name = #{param4} -->
+		SELECT * FROM ${table1} A INNER JOIN ${table2} B ON A.id = B.id WHERE A.id = #{id} AND A.name = #{name}
+	</select>
+	
+	<!-- 4.单个Map -->
+	<select id="queryAllByMap" resultType="User">
+		SELECT * FROM ${tableName} A WHERE A.id = #{id} AND A.name = #{name}
+	</select>
+	<select id="queryAllByMapWithAnno" resultType="User">
+		<!-- SELECT * FROM ${param1.tableName} A WHERE A.id = #{param1.id} AND A.name = #{param1.name} -->
+		SELECT * FROM ${paramMap.tableName} A WHERE A.id = #{paramMap.id} AND A.name = #{paramMap.name}
+	</select>
+	
+	<!-- 5.单个POJO -->
+	<select id="queryAllByUser" resultType="User">
+		SELECT * FROM tb_user A WHERE A.id = #{id} AND A.name = #{name}
+	</select>
+	<select id="queryAllByUserWithAnno" resultType="User">
+		<!-- SELECT * FROM tb_user A WHERE A.id = #{param1.id} AND A.name = #{param1.name} -->
+		SELECT * FROM tb_user A WHERE A.id = #{user.id} AND A.name = #{user.name}
+	</select>
+	
+	<!-- 6.混合参数String、POJO、Map -->
+	<select id="queryAllByMixed" resultType="User">
+		<!-- SELECT * FROM ${arg0} A WHERE A.user_name LIKE "%"#{arg1}"%" AND A.id = #{arg2.id} AND A.name = #{arg3.name} -->
+		<!-- SELECT * FROM ${param1} A WHERE A.user_name LIKE "%"#{param2}"%" AND A.id = #{param3.id} AND A.name = #{param4.name} -->
+		<!-- arg和parm可以混合使用 -->
+		SELECT * FROM ${arg0} A WHERE A.user_name LIKE "%"#{param2}"%" AND A.id = #{arg2.id} AND A.name = #{param4.name}
+	</select>
+	<select id="queryAllByMixedWithAnno" resultType="User">
+		<!-- SELECT * FROM ${param1} A WHERE A.user_name LIKE "%"#{param2}"%" AND A.id = #{param3.id} AND A.name = #{param4.name} -->
+		SELECT * FROM ${tableName} A WHERE A.user_name LIKE "%"#{userName}"%" AND A.id = #{user.id} AND A.name = #{map.name}
+	</select>
+	<select id="queryAllByMixedWithMixedAnno" resultType="User">
+		<!-- SELECT * FROM ${param1} A WHERE A.user_name LIKE "%"#{param2}"%" AND A.id = #{param3.id} AND A.name = #{param4.name} -->
+		SELECT * FROM ${_parameter}
+	</select>
+	
+</mapper>
+
+

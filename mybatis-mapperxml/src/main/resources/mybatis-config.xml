@@ -32,5 +32,6 @@
 	<mappers>
 		<mapper resource="UserMapper.xml" />
 		<mapper resource="sqlSegment.xml" />
+		<mapper resource="UserMapperForTestParam.xml" />
 	</mappers>
 </configuration>
