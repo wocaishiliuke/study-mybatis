@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baicai.mybatis.dao.UserDaoForDynamicSql">
+	
+    <select id="queryUserIf" resultType="User">
+        select * from tb_user where 1 = 1
+        <if test="_parameter != null and _parameter != ''">
+        	AND sex = #{sex}
+        </if>
+    </select>
+    <select id="queryUserAnnoIf" resultType="User">
+        select * from tb_user where 1 = 1
+        <!-- <if test="param1 != null and param1.trim() != ''"> -->
+        <!-- <if test="sex != null and sex.trim() != ''"> -->
+        <!-- 简单的Java代码也可以 -->
+        <if test="sex != null &amp;&amp; !''.equals(sex.trim())">
+        	AND sex = #{sex}
+        </if>
+    </select>
+    
+    <select id="queryUserChoose" resultType="User">
+        select * from tb_user where 1 = 1
+        <choose>
+        	<when test="sex != null and sex.trim() != ''">AND sex = #{sex}</when>
+        	<when test="password != null and password.trim() != ''">AND password = #{sex}</when>
+        	<otherwise>AND age = 22</otherwise>
+        </choose>
+    </select>
+    
+    <select id="queryUserWhere" resultType="User">
+        select * from tb_user
+        <where>
+	        <if test="sex != null and sex.trim() != ''">
+	        	AND sex = #{sex}
+	        </if>
+        </where>
+    </select>
+    
+    <insert id="insert" parameterType="User" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO tb_user(id, user_name, password, name, age, sex, birthday, created, updated) 
+		VALUES(null, #{username}, #{password}, #{name}, #{age}, #{sex}, #{birthday}, now(), now())
+	</insert>
+	
+	<update id="update" parameterType="User">
+		UPDATE tb_user SET user_name = #{username}, password = #{password}, name = #{name}, age = #{age}, sex = #{sex}, birthday = #{birthday}, updated = now()
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
