@@ -2,6 +2,7 @@ package com.baicai.mybatis.dao;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -65,6 +66,30 @@ public interface UserDaoForTestParam {
 	 */
 	public List<User> queryAllByUser(User user);
 	public List<User> queryAllByUserWithAnno(@Param("user") User user);
+	
+	/**
+	 * 单个List
+	 * 1.不使用@Param: _parameter={list=[1, 2], collection=[1, 2]}，即此时也会封装成Map
+	 * 2.使用@Param时: _parameter={ids=[1, 2], param1=[1, 2]}
+	 */
+	public List<User> queryAllByIdList(List<Long> ids);
+	public List<User> queryAllByIdListWithAnno(@Param("ids") List<Long> ids);
+	
+	/**
+	 * 单个Set
+	 * 1.不使用@Param: _parameter={collection=[1, 2]}，即此时也会封装成Map
+	 * 2.使用@Param时: _parameter={ids=[1, 2], param1=[1, 2]}
+	 */
+	public List<User> queryAllByIdSet(Set<Long> ids);
+	public List<User> queryAllByIdSetWithAnno(@Param("ids") Set<Long> ids);
+	
+	/**
+	 * 单个Array
+	 * 1.不使用@Param: _parameter={array=[J@6ee52dcd}，即此时也会封装成Map
+	 * 2.使用@Param时: _parameter={ids=[J@2781e022, param1=[J@2781e022}
+	 */
+	public List<User> queryAllByIdArray(Long[] ids);
+	public List<User> queryAllByIdArrayWithAnno(@Param("ids") Long[] ids);
 	
 	/**
 	 * 混合参数:String、POJO、Map

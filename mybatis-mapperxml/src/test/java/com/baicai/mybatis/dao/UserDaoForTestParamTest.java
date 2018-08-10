@@ -1,9 +1,12 @@
 package com.baicai.mybatis.dao;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -82,7 +85,44 @@ public class UserDaoForTestParamTest {
 		}
 	}
 	
-	//6.混合参数String、POJO、Map
+	//6.单个List参数
+	@Test
+	public void testQueryAllByIdList() {
+		List<Long> ids = new ArrayList<>();
+    	ids.add(1L);
+    	ids.add(2L);
+		//List<User> list = this.userDao.queryAllByIdList(ids);
+		List<User> list = this.userDao.queryAllByIdListWithAnno(ids);
+		if (null != list && list.size() > 0) {
+			for (User user : list) { System.out.println(user); }
+		}
+	}
+	
+	//7.单个Set参数
+	@Test
+	public void testQueryAllByIdSet() {
+		Set<Long> ids = new HashSet<>();
+		ids.add(1L);
+		ids.add(2L);
+		List<User> list = this.userDao.queryAllByIdSet(ids);
+		//List<User> list = this.userDao.queryAllByIdSetWithAnno(ids);
+		if (null != list && list.size() > 0) {
+			for (User user : list) { System.out.println(user); }
+		}
+	}
+	
+	//8.单个数组参数
+	@Test
+	public void testQueryAllByIdArray() {
+		Long[] ids = new Long[] {1L, 2L};
+		//List<User> list = this.userDao.queryAllByIdArray(ids);
+		List<User> list = this.userDao.queryAllByIdArrayWithAnno(ids);
+		if (null != list && list.size() > 0) {
+			for (User user : list) { System.out.println(user); }
+		}
+	}
+	
+	//9.混合参数String、POJO、Map
 	@Test
 	public void testQueryAllByMixed() {
 		String tableName = "tb_user";

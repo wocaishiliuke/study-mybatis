@@ -7,24 +7,24 @@
     <select id="queryUserIf" resultType="User">
         select * from tb_user where 1 = 1
         <if test="_parameter != null and _parameter != ''">
-        	AND sex = #{sex}
+        	AND password = #{password}
         </if>
     </select>
     <select id="queryUserAnnoIf" resultType="User">
         select * from tb_user where 1 = 1
         <!-- <if test="param1 != null and param1.trim() != ''"> -->
-        <!-- <if test="sex != null and sex.trim() != ''"> -->
+        <!-- <if test="password != null and password.trim() != ''"> -->
         <!-- 简单的Java代码也可以 -->
-        <if test="sex != null &amp;&amp; !''.equals(sex.trim())">
-        	AND sex = #{sex}
+        <if test="password != null &amp;&amp; !''.equals(password.trim())">
+        	AND password = #{password}
         </if>
     </select>
     
     <select id="queryUserChoose" resultType="User">
         select * from tb_user where 1 = 1
         <choose>
-        	<when test="sex != null and sex.trim() != ''">AND sex = #{sex}</when>
-        	<when test="password != null and password.trim() != ''">AND password = #{sex}</when>
+        	<when test="sex != null">AND sex = #{sex}</when>
+        	<when test="password != null and password.trim() != ''">AND password = #{password}</when>
         	<otherwise>AND age = 22</otherwise>
         </choose>
     </select>
@@ -32,20 +32,85 @@
     <select id="queryUserWhere" resultType="User">
         select * from tb_user
         <where>
-	        <if test="sex != null and sex.trim() != ''">
-	        	AND sex = #{sex}
+	        <if test="password != null and password.trim() != ''">
+	        	AND password = #{password}
 	        </if>
         </where>
     </select>
     
-    <insert id="insert" parameterType="User" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
-		INSERT INTO tb_user(id, user_name, password, name, age, sex, birthday, created, updated) 
-		VALUES(null, #{username}, #{password}, #{name}, #{age}, #{sex}, #{birthday}, now(), now())
-	</insert>
-	
-	<update id="update" parameterType="User">
-		UPDATE tb_user SET user_name = #{username}, password = #{password}, name = #{name}, age = #{age}, sex = #{sex}, birthday = #{birthday}, updated = now()
+	<update id="updateUserSet" parameterType="User">
+		UPDATE tb_user
+		<set>
+			<if test="sex != null">
+				sex = #{sex},
+			</if>
+			<if test="password != null and password.trim() != ''">
+				password = #{password},
+			</if>
+		</set>
 		WHERE id = #{id}
 	</update>
+	   
+    <select id="queryUserTrimWhere" resultType="User">
+        select * from tb_user
+        <!-- 注意这里的管道操作符不能写成AND | OR,这样对OR无效 -->
+        <trim prefix="WHERE" prefixOverrides="and |OR">
+        	<if test="password != null and password.trim() != ''">
+	        	AND password = #{password}
+	        </if>
+        </trim>
+    </select>
+	
+	<update id="updateUserTrimSet" parameterType="User">
+		UPDATE tb_user
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="sex != null">
+				sex = #{sex},
+			</if>
+			<if test="password != null and password.trim() != ''">
+				password = #{password},
+			</if>
+		</trim>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryUserForeachList" parameterType="list" resultType="User">
+        select * from tb_user
+        <where>
+	        <if test="ids != null and ids.size() > 0">
+	        	AND id IN
+	        	<foreach collection="ids" item="id" index="index" open="(" separator="," close=")">#{id}</foreach>
+	        </if>
+        </where>
+    </select>
+	
+	<select id="queryUserForeachSet" parameterType="collection" resultType="User">
+        select * from tb_user
+        <where>
+	        <if test="ids != null and ids.size() > 0">
+	        	AND id IN
+	        	<foreach collection="ids" item="id" index="index" open="(" separator="," close=")">#{id}</foreach>
+	        </if>
+        </where>
+    </select>
+	
+	<select id="queryUserForeachArray" parameterType="Long[]" resultType="User">
+        select * from tb_user
+        <where>
+	        <if test="ids != null and ids.length > 0">
+	        	AND id IN
+	        	<foreach collection="ids" item="id" index="index" open="(" separator="," close=")">#{id}</foreach>
+	        </if>
+        </where>
+    </select>
+	
+	<select id="queryUserBind" parameterType="String" resultType="User">
+		<bind name="id" value="3"/>
+        select * from tb_user
+        <where>
+	        <if test="password != null and password.trim() != ''">AND password = #{password}</if>
+	        <if test="id != null">AND id = #{id}</if>
+        </where>
+    </select>
 	
 </mapper>

@@ -61,7 +61,75 @@
 		SELECT * FROM tb_user A WHERE A.id = #{user.id} AND A.name = #{user.name}
 	</select>
 	
-	<!-- 6.混合参数String、POJO、Map -->
+	<!-- 6.单个List -->
+	<select id="queryAllByIdList" parameterType="list" resultType="User">
+		SELECT * FROM tb_user
+		<where>
+			<!-- <if test="list != null and list.size() > 0"> -->
+			<if test="collection != null and collection.size() > 0">
+				AND id IN
+				<foreach collection="list" item="id" index="index" open="(" separator="," close=")">#{id}</foreach>
+				<!-- <foreach collection="collection" item="id" index="index" open="(" separator="," close=")">#{id}</foreach> -->
+			</if>
+		</where>
+	</select>
+	<select id="queryAllByIdListWithAnno" parameterType="list" resultType="User">
+		SELECT * FROM tb_user
+		<where>
+			<if test="ids != null and ids.size() > 0">
+			<!-- <if test="param1 != null and param1.size() > 0"> -->
+				AND id IN
+				<foreach collection="ids" item="id" index="index" open="(" separator="," close=")">#{id}</foreach>
+				<!-- <foreach collection="param1" item="id" index="index" open="(" separator="," close=")">#{id}</foreach> -->
+			</if>
+		</where>
+	</select>
+	
+	<!-- 7.单个Set -->
+	<select id="queryAllByIdSet" parameterType="java.util.Set" resultType="User">
+		SELECT * FROM tb_user
+		<where>
+			<if test="collection != null and collection.size() > 0">
+				AND id IN
+				<foreach collection="collection" item="id" index="index" open="(" separator="," close=")">#{id}</foreach>
+			</if>
+		</where>
+	</select>
+	<select id="queryAllByIdSetWithAnno" parameterType="collection" resultType="User">
+		SELECT * FROM tb_user
+		<where>
+			<if test="ids != null and ids.size() > 0">
+			<!-- <if test="param1 != null and param1.size() > 0"> -->
+				AND id IN
+				<foreach collection="ids" item="id" index="index" open="(" separator="," close=")">#{id}</foreach>
+				<!-- <foreach collection="param1" item="id" index="index" open="(" separator="," close=")">#{id}</foreach> -->
+			</if>
+		</where>
+	</select>
+	
+	<!-- 7.单个Array -->
+	<select id="queryAllByIdArray" parameterType="long[]" resultType="User">
+		SELECT * FROM tb_user
+		<where>
+			<if test="array != null and array.length > 0">
+				AND id IN
+				<foreach collection="array" item="id" index="index" open="(" separator="," close=")">#{id}</foreach>
+			</if>
+		</where>
+	</select>
+	<select id="queryAllByIdArrayWithAnno" parameterType="long[]" resultType="User">
+		SELECT * FROM tb_user
+		<where>
+			<if test="ids != null and ids.length > 0">
+			<!-- <if test="param1 != null and param1.length() > 0"> -->
+				AND id IN
+				<foreach collection="ids" item="id" index="index" open="(" separator="," close=")">#{id}</foreach>
+				<!-- <foreach collection="param1" item="id" index="index" open="(" separator="," close=")">#{id}</foreach> -->
+			</if>
+		</where>
+	</select>
+	
+	<!-- 8.混合参数String、POJO、Map -->
 	<select id="queryAllByMixed" resultType="User">
 		<!-- SELECT * FROM ${arg0} A WHERE A.user_name LIKE "%"#{arg1}"%" AND A.id = #{arg2.id} AND A.name = #{arg3.name} -->
 		<!-- SELECT * FROM ${param1} A WHERE A.user_name LIKE "%"#{param2}"%" AND A.id = #{param3.id} AND A.name = #{param4.name} -->
