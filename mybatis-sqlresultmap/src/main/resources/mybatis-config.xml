@@ -8,6 +8,7 @@
 	
 	<settings>
 		<setting name="mapUnderscoreToCamelCase" value="true"/>
+		<!-- <setting name="autoMappingBehavior" value="FULL"/> -->
 	</settings>
 	
 	<typeAliases>
@@ -31,5 +32,6 @@
 	<!-- 引入映射文件 -->
 	<mappers>
 		<mapper resource="UserMapperForDynamicSql.xml" />
+		<mapper resource="OrderMapper.xml" />
 	</mappers>
 </configuration>

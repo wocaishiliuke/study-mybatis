@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baicai.mybatis.dao.OrderDao">
+	<!-- 一对一 -->
+    <select id="selectOrderUserByOrderNum1" resultType="OrderDTO1">
+        SELECT A.*,B.user_name,B.password,B.name FROM tb_order A 
+        LEFT JOIN tb_user B ON A.user_id = B.id 
+        WHERE A.order_number = #{orderNumber}
+    </select>
+    <resultMap id="OrderDTO2Map" type="OrderDTO2" autoMapping="true">
+		<id column="id" property="id"/>
+		<association property="user" javaType="User" autoMapping="true">
+			<id column="user_id" property="id"/>
+		</association>
+	</resultMap>
+    <select id="selectOrderUserByOrderNum2" resultMap="OrderDTO2Map">
+        SELECT A.*,B.user_name,B.password,B.name FROM tb_order A 
+        LEFT JOIN tb_user B ON A.user_id = B.id 
+        WHERE A.order_number = #{orderNumber}
+    </select>
+	
+	<!-- 一对多 -->
+	<!-- <resultMap id="OrderDTO3Map" type="OrderDTO3" autoMapping="true">
+		<id column="id" property="id"/>
+		<association property="user" javaType="User" autoMapping="true">
+			<id column="user_id" property="id"/>
+		</association>
+		<collection property="detailList" javaType="list" ofType="OrderDetail" autoMapping="true">
+			<id column="orderDetailId" property="id"/>
+			<result column="id" property="orderId"/>
+			<result column="detailStatus" property="status"/>
+		</collection>
+	</resultMap> -->
+	<resultMap id="fatherMap" type="OrderDTO3" autoMapping="true">
+		<id column="id" property="id"/>
+		<association property="user" javaType="User" autoMapping="true">
+			<id column="user_id" property="id"/>
+		</association>
+	</resultMap>
+	<resultMap id="OrderDTO3Map" type="OrderDTO3" autoMapping="true" extends="fatherMap">
+		<collection property="detailList" javaType="list" ofType="OrderDetail" autoMapping="true">
+			<id column="orderDetailId" property="id"/>
+			<result column="id" property="orderId"/>
+			<result column="detailStatus" property="status"/>
+		</collection>
+	</resultMap>
+	<select id="selectOrderUserDetailByOrderNum" resultMap="OrderDTO3Map">
+        SELECT A.*,B.user_name,B.password,B.name,C.id AS orderDetailId,C.item_id,C.total_price,C.status AS detailStatus
+        FROM tb_order A 
+        LEFT JOIN tb_user B ON A.user_id = B.id
+        LEFT JOIN tb_orderdetail C ON A.id = C.order_id
+        WHERE A.order_number = #{orderNumber}
+    </select>
+	
+	<!-- 多对多 -->
+	<resultMap id="OrderDTO4Map" type="OrderDTO4" autoMapping="true">
+		<id column="id" property="id"/>
+		<association property="user" javaType="User" autoMapping="true">
+			<id column="user_id" property="id"/>
+		</association>
+		<collection property="detailDTOList" javaType="list" ofType="OrderDetailDTO" autoMapping="true">
+			<id column="orderDetailId" property="id"/>
+			<result column="id" property="orderId"/>
+			<result column="detailStatus" property="status"/>
+			<association property="item" javaType="Item" autoMapping="true">
+				<id column="item_id" property="id"/>
+				<id column="itemStatus" property="status"/>
+			</association>
+		</collection>
+	</resultMap>
+    <select id="selectOrderUserDetailItemList" resultMap="OrderDTO4Map">
+        SELECT A.*,B.user_name,B.password,B.name,C.id AS orderDetailId,C.item_id,C.total_price,C.status AS detailStatus,
+        D.item_name,D.item_price,D.item_detail,D.status AS itemStatus
+        FROM tb_order A 
+        LEFT JOIN tb_user B ON A.user_id = B.id
+        LEFT JOIN tb_orderdetail C ON A.id = C.order_id
+        LEFT JOIN tb_item D ON C.item_id = D.id
+    </select>
+    
+    
+    <!-- 测试非嵌套的resultMap的自动映射 -->
+    <resultMap id="OrderMap" type="Order">
+		<id column="id" property="id"/>
+	</resultMap>
+    <select id="selectOne" resultMap="OrderMap">
+        SELECT * FROM tb_order A WHERE A.id = #{id}
+    </select>
+    
+    <!-- 测试FULL策略和autoMapping=true的差别 -->
+    <resultMap id="UserMap" type="User" autoMapping="true">
+	</resultMap>
+	<resultMap id="OrderUserMap" type="OrderDTO2" autoMapping="true">
+		<association property="user" resultMap="UserMap"></association>
+	</resultMap>
+    <select id="selectOrderUser" resultMap="OrderUserMap">
+        SELECT A.* FROM tb_order A 
+        LEFT JOIN tb_user B ON A.user_id = B.id 
+        WHERE A.order_number = #{orderNumber}
+    </select>
+</mapper>
