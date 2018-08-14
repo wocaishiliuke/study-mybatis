@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baicai.mybatis.dao.OrderDao">
+
+	<cache/>
+	<!-- <cache eviction="FIFO" flushInterval="5000" size="512" readOnly="true"/> -->
+	
+    <!-- <select id="selectById" resultType="Order" flushCache="false" useCache="true"> -->
+    <select id="selectById" resultType="Order">
+        SELECT A.* FROM tb_order A WHERE A.id = #{id}
+    </select>
+    
+    <update id="update" parameterType="Order" flushCache="false">
+    	UPDATE tb_order A
+		<set>
+			<if test="userId != null">A.user_id=#{userId}</if>
+			<if test="orderNumber != null and orderNumber.trim() != ''">A.order_number=#{orderNumber}</if>
+		</set>
+		WHERE A.id = #{id}
+    </update>
+</mapper>

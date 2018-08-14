@@ -11,5 +11,6 @@
   	<module>mybatis-globalconfig</module>
   	<module>mybatis-mapperxml</module>
   	<module>mybatis-sqlresultmap</module>
+  	<module>mybatis-cachelazypage</module>
   </modules>
 </project>
